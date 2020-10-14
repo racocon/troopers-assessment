@@ -4,22 +4,33 @@
       <el-card class="box-card">
         <div slot="header" class="header">
           <h2 class="h2">Currency Converter</h2>
+            <p class="details">
+              <i class="el-icon-time"></i>
+                {{ moment().format('Do MMMM YYYY') }}
+            </p>
         </div>
-        <currency-results/>
+        <currency-converter/>
       </el-card>
     </el-row>
   </div>
 </template>
 
 <script>
-import CurrencyResults from "./components/CurrencyResults.vue";
+import CurrencyConverter from "./components/CurrencyConverter.vue";
+import moment from "moment";
 
 export default {
   name: "app",
   components: {
-    CurrencyResults
+    CurrencyConverter
+  },
+  methods: {
+  moment: function () {
+    return moment();
   }
+},
 };
+
 </script>
 
 <style>
@@ -46,9 +57,6 @@ html {
 }
 .el-row {
   margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 .el-col {
   border-radius: 4px;
@@ -70,5 +78,10 @@ html {
 .h2 {
   color: #34495e;
   padding: 5px;
+}
+.details {
+  color: #535c68;
+  text-align: center;
+  font-size: 14px;
 }
 </style>
