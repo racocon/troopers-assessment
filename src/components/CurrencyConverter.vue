@@ -2,15 +2,17 @@
   <div class="results">
     <el-row>
         <!-- User input for amount to convert -->
-          <el-input
-            v-model.number="amount"
-            min="0"
+          <currency-input
+            v-currency-field
+            v-model="amount"
+            min="1"
             placeholder="Enter amount..."
-            style="width:180px; margin: 10px; float:middle;"
-          > {{ exchangeRates.base }} </el-input>
+            style="width:30%; height:24px; color: #535c68; margin: 10px; float:middle;"
+          > {{ exchangeRates.base }}</currency-input>
+          <span class="euro">EUR</span>
 
         <!-- User input for which currency to convert from -->
-          <el-select
+          <!-- <el-select
             v-model="selectedCurrency"
             placeholder="Select currency..."
             style="width:180px; margin: 10px; float:middle;"
@@ -20,18 +22,18 @@
             :key="key" 
             :label="key" 
             :value="key" />
-          </el-select>
+          </el-select> -->
     </el-row>
-    <el-row>
+    <!-- <el-row> -->
       <!-- Search bar to filter from currency table list -->
-      <el-input
+      <!-- <el-input
         v-model="search"
         placeholder="Search currency..."
         class="filter-item"
         size="mini"
-        style="width:210px; float:middle;"
+        style="width:50%; float:middle;"
       ></el-input>
-    </el-row>
+    </el-row> -->
     <el-row>
       <!-- List all the currencies from API -->
       <el-card v-for="(rate, key) in convertedRates"
@@ -119,6 +121,10 @@ export default {
 .h4 {
   color: #95a5a6;
   font-size: 16px;
+}
+.euro {
+  color: #535c68;
+  font-size: 20px;
 }
 .details {
   color: #535c68;
