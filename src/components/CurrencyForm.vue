@@ -6,7 +6,11 @@
         <el-input v-model="form.amountFrom" type="number" min="0">{{ form.amountFrom }}</el-input>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="form.rateFrom" :options="select.rates" placeholder="Please select..."></el-select>
+        <el-select v-model="form.rateFrom" :options="select.rates" placeholder="Please select...">
+          <el-option
+            :options="select.rates"
+          ></el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <el-form :inline="true" :model="form">
@@ -16,13 +20,8 @@
       <el-form-item>
         <el-select v-model="form.rateTo" :value="select.rates.value" placeholder="Please select...">
           <el-option
-            v-for="id in select.rates"
-            :key="id"
-            :label="select.rates.label"
-            :value="select.rates.id"
-          >
-          {{'Data ' + select.rates.id }}
-          </el-option>
+            :options="select.rates"
+          ></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -38,16 +37,12 @@ export default {
     return {
       form: {
         amountFrom: 1,
-        rateFrom: "",
-        amountTo: 5.36,
-        rateTo: ""
+        rateFrom: "EUR",
+        amountTo: 4.87,
+        rateTo: "MYR"
       },
       select: {
-        rates: [
-          { id: 1, value: "GBP", label: "GBP" },
-          { id: 2, value: "USD", label: "USD" },
-          { id: 3, value: "MYR", label: "MYR" }
-        ]
+        rates: []
       }
     };
   },

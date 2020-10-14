@@ -3,9 +3,8 @@
     <el-row gutter=20 type="flex" justify="center">
       <el-card class="box-card">
         <div slot="header" class="header">
-          <h2>Currency Converter</h2>
+          <h2 class="h2">Currency Converter</h2>
         </div>
-        <currency-form/>
         <currency-results/>
       </el-card>
     </el-row>
@@ -13,13 +12,11 @@
 </template>
 
 <script>
-import CurrencyForm from "./components/CurrencyForm.vue";
 import CurrencyResults from "./components/CurrencyResults.vue";
 
 export default {
   name: "app",
   components: {
-    CurrencyForm,
     CurrencyResults
   }
 };
@@ -69,5 +66,9 @@ html {
 }
 .box-card {
   width: 550px;
+}
+.h2 {
+  color: #34495e;
+  padding: 5px;
 }
 </style>
