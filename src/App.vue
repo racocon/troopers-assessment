@@ -1,17 +1,18 @@
 <template>
   <div id="app">
-    <el-row gutter=20 type="flex" justify="center">
+    <el-row gutter:20 type="flex" justify="center">
       <el-card class="box-card">
         <div slot="header" class="header">
           <h2 class="h2">Currency Converter</h2>
             <p class="details">
-              <i class="el-icon-time"></i>
+              <i class="el-icon-date"></i>
                 {{ moment().format('Do MMMM YYYY') }}
             </p>
         </div>
         <currency-converter/>
       </el-card>
     </el-row>
+    <test/>
   </div>
 </template>
 

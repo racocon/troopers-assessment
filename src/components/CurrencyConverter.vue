@@ -1,26 +1,26 @@
 <template>
   <div class="results">
     <el-row>
-      <el-form :inline="true" :model="form">
         <!-- User input for amount to convert -->
-        <el-form-item label>
           <el-input
-            v-model="form.amount"
-            type="number"
+            v-model.number="amount"
             min="0"
             placeholder="Enter amount..."
-            style="width:100px; margin: 10px; float:left;"
-          ></el-input>
-        </el-form-item>
+            style="width:180px; margin: 10px; float:middle;"
+          > {{ exchangeRates.base }} </el-input>
+
         <!-- User input for which currency to convert from -->
-        <el-form-item label>
           <el-select
-            v-model="form.currency"
+            v-model="selectedCurrency"
             placeholder="Select currency..."
-            style="width:150px; margin: 10px; float:right;"
-          ></el-select>
-        </el-form-item>
-      </el-form>
+            style="width:180px; margin: 10px; float:middle;"
+          >
+          <el-option 
+            v-for="(rate, key) in convertedRates"
+            :key="key" 
+            :label="key" 
+            :value="key" />
+          </el-select>
     </el-row>
     <el-row>
       <!-- Search bar to filter from currency table list -->
@@ -29,62 +29,80 @@
         placeholder="Search currency..."
         class="filter-item"
         size="mini"
-        style="width:210px; float:left;"
+        style="width:210px; float:middle;"
       ></el-input>
     </el-row>
     <el-row>
-      <!-- Table with all the available currency list from API -->
-      <el-table
-        :data="tableData.filter(data => !search || data.currency.toLowerCase().includes(search.toLowerCase()) || data.code.toLowerCase().includes(search.toLowerCase()))"
-        style="width: 100%"
-      >
-        <el-table-column prop="currency" label="Currency" width="200"></el-table-column>
-        <el-table-column prop="code" label="Code" width="150" align="right"></el-table-column>
-        <el-table-column prop="rate" label="Rate" width="150" align="right"></el-table-column>
-      </el-table>
+      <!-- List all the currencies from API -->
+      <el-card v-for="(rate, key) in convertedRates"
+          :key="key"
+          class="box-card">
+        <div>
+          {{ key }} : {{ rate }}
+        </div>
+      </el-card>
+
     </el-row>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      form: {
-        amount: 1,
-        currency: "EUR"
-      },
-      tableData: [
-        {
-          currency: "Euro",
-          code: "EUR",
-          rate: "1.0000"
-        },
-        {
-          currency: "Malaysian Ringgit",
-          code: "MYR",
-          rate: "4.8700"
-        },
-        {
-          currency: "Canadian Dollar",
-          code: "CAD",
-          rate: "1.5450"
-        },
-        {
-          currency: "United States Dollar",
-          code: "USD",
-          rate: "1.1787"
-        },
-        {
-          currency: "Australian Dollar",
-          code: "AUD",
-          rate: "1.6403"
-        }
-      ],
-      search: ""
-    };
+import {
+  ref,
+  computed,
+  onUnmounted,
+  onBeforeMount
+} from '@vue/composition-api'
+
+import { getLatest } from '@/api/exchange-rates'
+
+// A function that takes the amount and rates and returns an mapped object containing the result for each rate
+const convertExchangeRates = (amount, exchangeRates) => {
+  if (!exchangeRates.value.rates || !Object.keys(exchangeRates.value.rates).length) {
+    return {}
   }
-};
+
+  return Object.keys(exchangeRates.value.rates)
+    .reduce((rates, key) => {
+      const rate = exchangeRates.value.rates[key] * amount.value
+
+      rates[key] = rate.toFixed(2)
+
+      return rates
+    }, {})
+}
+
+export default {
+  setup () {
+    let interval
+    const exchangeRates = ref({})
+    // The amount is reactive since it will be used in a v-model
+    const amount = ref(0)
+
+    // The computed value calls the convertExchangeRates function
+    const convertedRates = computed(() => convertExchangeRates(amount, exchangeRates))
+
+    onBeforeMount(() => {
+      interval = setInterval(async () => {
+        exchangeRates.value = await getLatest()
+      }, 1000)
+    })
+
+    onUnmounted(() => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    })
+
+    return {
+      exchangeRates,
+      amount,
+      convertedRates,
+      selectedCurrency: "",
+      search: ""
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -116,5 +134,9 @@ export default {
 }
 .filter-item {
   font-family: 'Helvetica', FontAwesome, sans-serif;
+}
+.box-card {
+  color: #535c68;
+  width: 100%;
 }
 </style>
