@@ -10,19 +10,6 @@
             style="width:30%; height:24px; color: #535c68; margin: 10px; float:middle;"
           > {{ exchangeRates.base }}</currency-input>
           <span class="euro">EUR</span>
-
-        <!-- User input for which currency to convert from -->
-          <!-- <el-select
-            v-model="selectedCurrency"
-            placeholder="Select currency..."
-            style="width:180px; margin: 10px; float:middle;"
-          >
-          <el-option 
-            v-for="(rate, key) in convertedRates"
-            :key="key" 
-            :label="key" 
-            :value="key" />
-          </el-select> -->
     </el-row>
     <!-- <el-row> -->
       <!-- Search bar to filter from currency table list -->
@@ -31,19 +18,18 @@
         placeholder="Search currency..."
         class="filter-item"
         size="mini"
-        style="width:50%; float:middle;"
+        style="width:40%; float:middle;"
       ></el-input>
     </el-row> -->
     <el-row>
       <!-- List all the currencies from API -->
-      <el-card v-for="(rate, key) in convertedRates"
+      <el-card shadow="hover" v-for="(rate, key) in convertedRates"
           :key="key"
           class="box-card">
         <div>
           {{ key }} : {{ rate }}
         </div>
       </el-card>
-
     </el-row>
   </div>
 </template>
@@ -95,16 +81,16 @@ export default {
         clearInterval(interval)
       }
     })
-
+    
     return {
       exchangeRates,
       amount,
       convertedRates,
-      selectedCurrency: "",
       search: ""
     }
   }
 }
+
 </script>
 
 <style scoped>

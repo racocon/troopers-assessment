@@ -12,7 +12,6 @@
         <currency-converter/>
       </el-card>
     </el-row>
-    <test/>
   </div>
 </template>
 
